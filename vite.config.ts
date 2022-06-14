@@ -7,6 +7,15 @@ export default defineConfig({
 	resolve: {
 		extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json"],
 	},
+	build: {
+		rollupOptions: {
+			output: {
+				chunkFileNames: "js/[name]-[hash].js",
+				entryFileNames: "js/[name]-[hash].js",
+				assetFileNames: "[ext]/[name]-[hash].[ext]",
+			},
+		},
+	},
 	server: {
 		proxy: {
 			"/a.jpeg": {

@@ -7,3 +7,8 @@ import HelloWorld from "./components/HelloWorld.vue";
 <template>
 	<HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />
 </template>
+<style scoped>
+body {
+	background-color: antiquewhite;
+}
+</style>
