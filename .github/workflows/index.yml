@@ -9,16 +9,27 @@ jobs:
     build:
         runs-on: ubuntu-latest
         steps:
-            - name: Deploy using ssh
-              uses: appleboy/ssh-action@master
+            - name: 迁出代码
+              uses: actions/checkout@master
+            - name: 安装node.js
+              uses: actions/setup-node@v1
               with:
-                  host: ${{ secrets.HOST }}
-                  username: ${{ secrets.USERNAME }}
-                  key: ${{ secrets.PRIVATE_KEY }}
-                  port: 22
-                  script: |
-                      cd /var/www/blog/
-                      git pull origin master
-                      git status
-                      npm install --only=prod
-                      pm2 restart node1
+                  node-version: 14.17.0
+            - name: 安装依赖
+              run: npm install
+
+            - name: 打包
+              run: npm run build
+
+            - name: 发布到远程服务器
+              uses: easingthemes/ssh-deploy@v2.1.1
+              env:
+                  SSH_PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+                  ARGS: '-avzr --delete'
+                  # 源目录
+                  SOURCE: 'index.html'
+                  REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+                  # 用户
+                  REMOTE_USER: 'root'
+                  # 目标地址
+                  TARGET: '/var/www/frontend/'
