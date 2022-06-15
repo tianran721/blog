@@ -21,15 +21,16 @@ jobs:
             - name: 打包
               run: npm run build
 
-            - name: 发布到远程服务器
-              uses: easingthemes/ssh-deploy@v2.1.1
-              env:
-                  SSH_PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-                  ARGS: '-avzr --delete'
-                  # 源目录
-                  SOURCE: 'dist/'
-                  REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-                  # 用户
-                  REMOTE_USER: 'root'
-                  # 目标地址
-                  TARGET: ${{ secrets.REMOTE_TARGET }}
+             - name: Deploy
+                # 因为构建之后，需要把代码上传到服务器上，所以需要连接到ssh，并且做一个拷贝操作
+                uses: cross-the-world/scp-pipeline@master
+                env:
+                  WELCOME: "ssh scp ssh pipelines"
+                  LASTSSH: "Doing something after copying"
+                with:
+                  host: ${{ secrets.REMOTE_HOST }}
+                  user: ${{ secrets.REMOTE_USER }}
+                  pass: ${{ secrets.USER_PASS }}
+                  connect_timeout: 10s
+                  local: './dist/*'
+                  remote: ${{ REMOTE_TARGET }}
