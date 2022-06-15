@@ -5,7 +5,7 @@ import HelloWorld from "./components/HelloWorld.vue";
 </script>
 
 <template>
-	<HelloWorld msg="ssh 修改了" />
+	<HelloWorld msg="ssh 修改了!!!" />
 </template>
 <style scoped>
 body {
